@@ -1,41 +1,9 @@
 import sys
-import magic
-import getopt
 
-text_files = []
-
-supported_file_formats = ["text/plain", "inode/x-empty"]
-
-options = "n:h"
+from validator.file_args_validator import FileArgsValidator
+from validator.options_validator import OptionsValidator
 
 partial_text_lines = 0
-
-
-def validate_program_args(arguments):
-    for opt, arg in arguments:
-        if opt in "-n":
-            try:
-                global partial_text_lines
-                partial_text_lines = int(arg)
-            except:
-                print("-n option argument must be integer")
-                exit(0)
-        elif opt in "-h":
-            print("Help message")
-    return True
-
-
-def validate_file_args(file_names):
-    if len(file_names) == 0:
-        print('Provide text files to be printed out')
-        exit(0)
-
-    for file in file_names:
-        file_type = magic.from_file(file, mime=True)
-        if file_type not in supported_file_formats:
-            print('File: ' + file + ' not supported. Use --help to get list of supported fileformats')
-            exit(0)
-        print(file_type)
 
 
 def print_partial_contents_to_stdout(values, nr_of_lines):
@@ -58,8 +26,10 @@ def print_contents_to_stdout(arguments, values):
 
 
 if __name__ == '__main__':
-    arguments, values = getopt.getopt(sys.argv[1:], options)
-    print(arguments)
-    validated_program_args = validate_program_args(arguments)
-    validate_file_args(values)
-    print_contents_to_stdout(arguments, values)
+    options, values = OptionsValidator().validate_program_options(sys.argv[1:])
+    FileArgsValidator().validate_program_args(values)
+    print(options)
+    print(values)
+#   validated_program_args = validate_program_args(arguments)
+#  validate_file_args(values)
+#  print_contents_to_stdout(arguments, values)
