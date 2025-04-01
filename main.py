@@ -6,7 +6,7 @@ text_files = []
 
 supported_file_formats = ["text/plain", "inode/x-empty"]
 
-options = "n:h:"
+options = "n:h"
 
 partial_text_lines = 0
 
@@ -20,6 +20,8 @@ def validate_program_args(arguments):
             except:
                 print("-n option argument must be integer")
                 exit(0)
+        elif opt in "-h":
+            print("Help message")
     return True
 
 
